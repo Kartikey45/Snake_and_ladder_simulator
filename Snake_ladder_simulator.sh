@@ -25,7 +25,6 @@ function checkOption()
 {
 	rollDie=$(rollDie)
 	checkOption=$(( 1 + RANDOM % 3 ))
-
 	case "$checkOption" in
 		$NO_PLAY)
 			position=$position
@@ -39,15 +38,12 @@ function checkOption()
 			;;
 		$SNAKE)
 			position=$(( position - rollDie ))
-
 			if [ $position -lt $START_POSITION ]
 			then
 				position=$START_POSITION
 			fi
 			;;
 	esac
-
-	echo $position
 }
 
 #FUNCTION TO CONTINUE PLAYING TILL REACHES WINNING POSITION
@@ -56,7 +52,10 @@ function winningPosition()
 	while [ $position -ne $WINNING_POSITION ]
 	do
 		checkOption
+		((rollDieCount++))
+		echo "dice position : $position"
 	done
+	echo "total dice count : $rollDieCount"
 }
 
 winningPosition
