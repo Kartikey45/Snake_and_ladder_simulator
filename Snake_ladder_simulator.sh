@@ -3,15 +3,17 @@
 echo "**********************Welcome to Snake and ladder Simulator***********************"
 
 #CONSTANTS
-NUMBER_OF_PLAYER=1
 START_POSITION=0
 NO_PLAY=1
 LADDER=2
 SNAKE=3
 WINNING_POSITION=100
 
-#VARIABLE
+#VARIABLES
 position=$START_POSITION
+positionOfPlayer1=$START_POSITION
+positionOfPlayer2=$START_POSITION
+flag=0
 
 #FUNCTION ROLL DIE FOR PLAYER
 function rollDie()
@@ -25,6 +27,7 @@ function checkOption()
 {
 	rollDie=$(rollDie)
 	checkOption=$(( 1 + RANDOM % 3 ))
+
 	case "$checkOption" in
 		$NO_PLAY)
 			position=$position
@@ -44,18 +47,47 @@ function checkOption()
 			fi
 			;;
 	esac
+
 }
 
-#FUNCTION TO CONTINUE PLAYING TILL REACHES WINNING POSITION
+#FUNCTION TO CONTINUE PLAYING TILL ANY PLAYER REACHES WINNING POSITION
 function winningPosition()
 {
 	while [ $position -ne $WINNING_POSITION ]
 	do
-		checkOption
-		((rollDieCount++))
-		echo "dice position : $position"
+		#FUNCTION CALL TO SET THE PLAYER
+		setPlayer
 	done
-	echo "total dice count : $rollDieCount"
 }
 
+#FUNCTION TO SET PLAYER
+function setPlayer()
+{
+	if [ $flag -eq 0 ]
+	then
+		position=$positionOfPlayer1
+		checkOption
+		flag=1
+		positionOfPlayer1=$position
+	else
+		position=$positionOfPlayer2
+		checkOption
+		flag=0
+		positionOfPlayer2=$position
+	fi
+}
+
+#FUNCTION TO CHECK WINNER
+function checkWinner()
+{
+	if [ $positionOfPlayer1 -eq $WINNING_POSITION ]
+	then
+		echo "Player 1 Wins"
+	else
+		echo "Player 2 Wins"
+	fi
+}
+
+#FUNCTION CALL
 winningPosition
+checkWinner
