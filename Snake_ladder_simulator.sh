@@ -1,4 +1,4 @@
-0#!/bin/bash -x
+#!/bin/bash -x
 
 echo "**********************Welcome to Snake and ladder Simulator***********************"
 
@@ -34,7 +34,6 @@ function checkOption()
 			;;
 		$SNAKE)
 			position=$(( position - rollDie ))
-
 			if [ $position -lt 0 ]
 			then
 				position=$START_POSITION
