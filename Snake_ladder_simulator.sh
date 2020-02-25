@@ -1,4 +1,4 @@
-#!/bin/bash -x
+0#!/bin/bash -x
 
 echo "**********************Welcome to Snake and ladder Simulator***********************"
 
@@ -8,26 +8,49 @@ START_POSITION=0
 NO_PLAY=1
 LADDER=2
 SNAKE=3
+WINNING_POSITION=100
 
 #VARIABLE
 position=$START_POSITION
 
-#ROLL DIE FOR PLAYER
-rollDie=$(( 1 + RANDOM % 6 ))
+#FUNCTION ROLL DIE FOR PLAYER
+function rollDie()
+{
+	rollDie=$(( 1 + RANDOM % 6 ))
+	echo $rollDie
+}
 
-#CHECK FOR OPTION
-checkOption=$(( 1 + RANDOM % 3 ))
+#FUNCTION TO CHECK FOR OPTION
+function checkOption()
+{
+	rollDie=$(rollDie)
+	checkOption=$(( 1 + RANDOM % 3 ))
+	case "$checkOption" in
+		$NO_PLAY)
+			position=$position
+			;;
+		$LADDER)
+			position=$(( position + rollDie ))
+			;;
+		$SNAKE)
+			position=$(( position - rollDie ))
 
-case "$checkOption" in
-	$NO_PLAY)
-		echo "Player is on same Position."
-		;;
-	$LADDER)
-		position=$(( position + rollDie ))
-		echo "Player moves ahead by $rollDie position."
-		;;
-	$SNAKE)
-		position=$(( position - rollDie ))
-		echo "Player moves behind by $rollDie position."
-		;;
-esac
+			if [ $position -lt 0 ]
+			then
+				position=$START_POSITION
+			fi
+			;;
+	esac
+	echo $position
+}
+
+#FUNCTION TO CONTINUE PLAYING TILL REACHES WINNING POSITION
+function winningPosition()
+{
+	while [ $position -ne $WINNING_POSITION ]
+	do
+		checkOption
+	done
+}
+
+winningPosition
